@@ -1,22 +1,19 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const attendanceRoutes = require("./routes/attendance");
+const studentRoutes = require("./routes/student");
 
 const app = express();
 app.use(express.json());
 
-// koneksi database
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("Attendance database connected"))
+  .then(() => console.log("DB connected"))
   .catch(err => console.error(err));
 
-app.use("/attendance", attendanceRoutes);
+app.use("/students", studentRoutes);
 
-// agar bisa jalan di lokal & Vercel
-if (require.main === module) {
-  app.listen(3001, () => {
-    console.log("Attendance service running on port 3001");
-  });
-}
+// endpoint root biar ga 500
+app.get("/", (req, res) => {
+  res.send("Student Service is running");
+});
 
-module.exports = app;
+module.exports = app; // ⬅️ WAJIB
